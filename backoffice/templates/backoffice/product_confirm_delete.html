@@ -1,0 +1,16 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Supprimer produit — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>Supprimer le produit</h2>
+  <a href="{% url 'backoffice:product_list' %}" class="btn btn-outline btn-sm">Annuler</a>
+</div>
+
+<div class="card">
+  <p>Confirmer la suppression de <strong>{{ product.name }}</strong> ?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+  </form>
+</div>
+{% endblock %}

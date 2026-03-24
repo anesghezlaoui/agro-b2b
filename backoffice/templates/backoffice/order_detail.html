@@ -1,0 +1,53 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Commande #{{ order.pk }} — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>Commande #{{ order.pk }}</h2>
+  <a href="{% url 'backoffice:order_list' %}" class="btn btn-outline btn-sm">Liste</a>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0;">Livraison &amp; statut</h3>
+  <p>
+    Client : <strong>{{ order.client.business_name|default:order.client.phone }}</strong>
+    — créée le {{ order.created_at|date:"d/m/Y à H:i" }}
+  </p>
+  <form method="post" class="bo-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+  </form>
+  <p style="color:var(--muted); font-size:0.9rem;">
+    Les statuts <em>En préparation</em>, <em>En livraison</em>, <em>Livrée</em> déclenchent des notifications côté application mobile.
+  </p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0;">Lignes de commande</h3>
+  <div class="table-wrap">
+    <table class="bo-table">
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Qté</th>
+          <th>Prix unit.</th>
+          <th>Sous-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for line in order.items.all %}
+        <tr>
+          <td>{{ line.product.name }}</td>
+          <td>{{ line.quantity }}</td>
+          <td>{{ line.unit_price }} DA</td>
+          <td>{{ line.quantity }} × {{ line.unit_price }} DA</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">Aucune ligne.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Total : {{ order.total }} DA</strong></p>
+</div>
+{% endblock %}

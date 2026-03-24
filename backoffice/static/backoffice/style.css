@@ -1,0 +1,338 @@
+:root {
+  --agro-green: #1b8f4b;
+  --agro-green-dark: #146b38;
+  --bg: #f4f7f5;
+  --card: #ffffff;
+  --text: #1a2e22;
+  --muted: #5c6d62;
+  --border: #d8e5dc;
+  --danger: #c0392b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--agro-green);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.bo-wrap {
+  display: flex;
+  min-height: 100vh;
+}
+
+.bo-sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, var(--agro-green) 0%, var(--agro-green-dark) 100%);
+  color: #fff;
+  padding: 1.25rem 0;
+  flex-shrink: 0;
+}
+
+.bo-sidebar h1 {
+  font-size: 1.1rem;
+  margin: 0 1rem 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.bo-sidebar nav a {
+  display: block;
+  padding: 0.65rem 1.25rem;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+.bo-sidebar nav a:hover,
+.bo-sidebar nav a.active {
+  background: rgba(0, 0, 0, 0.12);
+  border-left-color: #fff;
+  text-decoration: none;
+}
+
+.bo-main {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  overflow-x: auto;
+}
+
+.bo-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.bo-topbar h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--agro-green);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--agro-green-dark);
+  color: #fff;
+  text-decoration: none;
+}
+.btn-outline {
+  background: #fff;
+  color: var(--agro-green);
+  border: 2px solid var(--agro-green);
+}
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table.bo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+table.bo-table th,
+table.bo-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+table.bo-table th {
+  background: #eef5f0;
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.badge-ok {
+  background: #d4edda;
+  color: #155724;
+}
+.badge-warn {
+  background: #fff3cd;
+  color: #856404;
+}
+.badge-info {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.stat-card .num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--agro-green);
+}
+.stat-card .label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+form.bo-form .row {
+  margin-bottom: 1rem;
+}
+form.bo-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+form.bo-form input[type="text"],
+form.bo-form input[type="number"],
+form.bo-form input[type="url"],
+form.bo-form input[type="password"],
+form.bo-form select,
+form.bo-form textarea {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+form.bo-form .helptext {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.messages {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+.messages li {
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+.messages .success {
+  background: #d4edda;
+  color: #155724;
+}
+.messages .error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e8f5e9 0%, #fff 50%, #e3f2fd 100%);
+}
+.landing h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  color: var(--agro-green-dark);
+}
+.landing p {
+  color: var(--muted);
+  margin-bottom: 2rem;
+  text-align: center;
+  max-width: 420px;
+}
+.landing-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+.landing-cards a {
+  display: block;
+  padding: 1.25rem 1.75rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  color: var(--text);
+  font-weight: 600;
+  min-width: 200px;
+  text-align: center;
+}
+.landing-cards a:hover {
+  border-color: var(--agro-green);
+  text-decoration: none;
+}
+
+.login-box {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.login-box h1 {
+  margin-top: 0;
+  color: var(--agro-green-dark);
+}
+
+.login-box .bo-input,
+.login-box input[type="text"],
+.login-box input[type="password"] {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+.login-box .row {
+  margin-bottom: 1rem;
+}
+.login-box label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.search-bar input[type="text"] {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  min-width: 220px;
+}
+
+.filter-pills a {
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.85rem;
+}
+.filter-pills a.active {
+  background: var(--agro-green);
+  color: #fff;
+  border-color: var(--agro-green);
+  text-decoration: none;
+}

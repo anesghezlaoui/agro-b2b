@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AgroB2B — Gestion{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'backoffice/style.css' %}">
+</head>
+<body>
+  <div class="bo-wrap">
+    <aside class="bo-sidebar">
+      <h1>AgroB2B</h1>
+      <nav>
+        <a href="{% url 'backoffice:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Tableau de bord</a>
+        <a href="{% url 'backoffice:client_list' %}" class="{% if 'client' in request.resolver_match.url_name %}active{% endif %}">Clients</a>
+        <a href="{% url 'backoffice:order_list' %}" class="{% if 'order' in request.resolver_match.url_name %}active{% endif %}">Commandes &amp; livraison</a>
+        <a href="{% url 'backoffice:product_list' %}" class="{% if 'product' in request.resolver_match.url_name %}active{% endif %}">Produits</a>
+        <a href="{% url 'backoffice:category_list' %}" class="{% if 'category' in request.resolver_match.url_name %}active{% endif %}">Catégories</a>
+        <a href="{% url 'backoffice:variant_list' %}" class="{% if 'variant' in request.resolver_match.url_name %}active{% endif %}">Variantes</a>
+        <a href="{% url 'admin:index' %}">Admin Django</a>
+        <a href="/api/docs/">API (Swagger)</a>
+        <a href="{% url 'backoffice:logout' %}">Déconnexion</a>
+      </nav>
+    </aside>
+    <main class="bo-main">
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

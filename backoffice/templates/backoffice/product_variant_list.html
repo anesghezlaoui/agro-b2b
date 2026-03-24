@@ -1,0 +1,41 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Variantes — {{ product.name }} — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>Variantes : {{ product.name }}</h2>
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+    <a href="{% url 'backoffice:variant_create' product.pk %}" class="btn btn-primary">Ajouter une variante</a>
+    <a href="{% url 'backoffice:product_list' %}" class="btn btn-outline btn-sm">Liste produits</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="bo-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Libellé</th>
+          <th>Image</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in variants %}
+        <tr>
+          <td>{{ v.pk }}</td>
+          <td>{{ v.label }}</td>
+          <td>{% if v.image_url %}<a href="{{ v.image_url }}" target="_blank" rel="noopener">voir</a>{% else %}—{% endif %}</td>
+          <td>
+            <a href="{% url 'backoffice:variant_edit' product.pk v.pk %}" class="btn btn-sm btn-outline">Modifier</a>
+            <a href="{% url 'backoffice:variant_delete' product.pk v.pk %}" class="btn btn-sm btn-danger">Suppr.</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">Aucune variante pour ce produit.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

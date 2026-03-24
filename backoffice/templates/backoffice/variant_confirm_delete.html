@@ -1,0 +1,17 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Supprimer variante — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>Supprimer la variante</h2>
+  <a href="{% url 'backoffice:product_variant_list' product.pk %}" class="btn btn-outline btn-sm">Annuler</a>
+</div>
+
+<div class="card">
+  <p>Produit : <strong>{{ product.name }}</strong></p>
+  <p>Supprimer la variante <strong>{{ variant.label }}</strong> ?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Tableau de bord — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>Tableau de bord</h2>
+  <span style="color: var(--muted);">Bonjour, {{ request.user.get_username }}</span>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="num">{{ stats.clients_total }}</div>
+    <div class="label">Clients</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.clients_pending }}</div>
+    <div class="label">En attente validation</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.orders_today }}</div>
+    <div class="label">Commandes aujourd’hui</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.orders_pending }}</div>
+    <div class="label">Commandes en attente</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.products_count }}</div>
+    <div class="label">Produits</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ stats.categories_count }}</div>
+    <div class="label">Catégories</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0;">Dernières commandes</h3>
+  <div class="table-wrap">
+    <table class="bo-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Client</th>
+          <th>Total</th>
+          <th>Statut</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in recent_orders %}
+        <tr>
+          <td>{{ o.pk }}</td>
+          <td>{{ o.client.business_name|default:o.client.phone }}</td>
+          <td>{{ o.total }} DA</td>
+          <td><span class="badge badge-info">{{ o.get_status_display }}</span></td>
+          <td>{{ o.created_at|date:"d/m/Y H:i" }}</td>
+          <td><a href="{% url 'backoffice:order_detail' o.pk %}" class="btn btn-sm btn-outline">Voir</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">Aucune commande.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

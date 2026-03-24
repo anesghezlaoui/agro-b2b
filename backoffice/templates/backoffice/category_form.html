@@ -1,0 +1,16 @@
+{% extends "backoffice/base.html" %}
+{% block title %}{{ title }} — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>{{ title }}</h2>
+  <a href="{% url 'backoffice:category_list' %}" class="btn btn-outline btn-sm">Liste</a>
+</div>
+
+<div class="card">
+  <form method="post" class="bo-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+  </form>
+</div>
+{% endblock %}

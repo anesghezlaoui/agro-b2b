@@ -1,0 +1,52 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Produits — AgroB2B{% endblock %}
+{% block content %}
+<div class="bo-topbar">
+  <h2>Produits</h2>
+  <a href="{% url 'backoffice:product_create' %}" class="btn btn-primary">Nouveau produit</a>
+</div>
+
+<form method="get" class="search-bar">
+  <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par nom…">
+  <button type="submit" class="btn btn-primary btn-sm">Rechercher</button>
+</form>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="bo-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Catégorie</th>
+          <th>Prix</th>
+          <th>Stock</th>
+          <th>Unité</th>
+          <th>Promo</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>{{ p.pk }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.category|default:"—" }}</td>
+          <td>{{ p.price }} DA</td>
+          <td>{{ p.stock }}</td>
+          <td>{{ p.get_unit_display }}</td>
+          <td>{% if p.is_promo %}<span class="badge badge-warn">Oui</span>{% else %}—{% endif %}</td>
+          <td>
+            <a href="{% url 'backoffice:product_variant_list' p.pk %}" class="btn btn-sm btn-primary">Variantes</a>
+            <a href="{% url 'backoffice:product_edit' p.pk %}" class="btn btn-sm btn-outline">Modifier</a>
+            <a href="{% url 'backoffice:product_delete' p.pk %}" class="btn btn-sm btn-danger">Suppr.</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">Aucun produit.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion — AgroB2B</title>
+  <link rel="stylesheet" href="{% static 'backoffice/style.css' %}">
+</head>
+<body>
+  <div class="login-box">
+    <h1>Connexion grossiste</h1>
+    {% if needs_superuser %}
+    <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+      <strong>Aucun superutilisateur</strong> — créez d’abord un compte administrateur :
+      <a href="{% url 'backoffice:setup_superuser' %}">Créer un superutilisateur</a>
+    </div>
+    {% endif %}
+    <p style="color: var(--muted); font-size: 0.9rem;">Compte <strong>staff</strong> ou superutilisateur uniquement.</p>
+    {% if form.non_field_errors %}
+      <ul class="messages">
+        {% for e in form.non_field_errors %}
+          <li class="error">{{ e }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form method="post" action="">
+      {% csrf_token %}
+      <div class="row">
+        <label for="id_username">Identifiant</label>
+        {{ form.username }}
+      </div>
+      <div class="row">
+        <label for="id_password">Mot de passe</label>
+        {{ form.password }}
+      </div>
+      <button type="submit" class="btn btn-primary">Se connecter</button>
+    </form>
+    <p style="margin-top: 1.5rem;"><a href="{% url 'home' %}">← Accueil</a></p>
+  </div>
+</body>
+</html>

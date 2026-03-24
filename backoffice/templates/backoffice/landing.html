@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgroB2B</title>
+  <link rel="stylesheet" href="{% static 'backoffice/style.css' %}">
+</head>
+<body>
+  <div class="landing">
+    <h1>AgroB2B</h1>
+    <p>Commande B2B terrain — espace grossiste, API mobile et documentation.</p>
+    {% if needs_superuser %}
+    <div class="card" style="max-width:480px;margin-bottom:1.5rem;border-color:#f0ad4e;background:#fffbf0;">
+      <strong>Première installation</strong>
+      <p style="margin:0.5rem 0 0;color:var(--muted);font-size:0.95rem;">
+        Aucun superutilisateur n’est défini. Créez le compte administrateur pour accéder à la gestion.
+      </p>
+      <p style="margin-top:1rem;"><a href="{% url 'backoffice:setup_superuser' %}" class="btn btn-primary">Créer un superutilisateur</a></p>
+    </div>
+    {% endif %}
+    <div class="landing-cards">
+      <a href="{% url 'backoffice:login' %}">Espace gestion grossiste</a>
+      <a href="/api/docs/">Documentation API</a>
+      <a href="{% url 'admin:index' %}">Admin Django</a>
+    </div>
+  </div>
+</body>
+</html>
