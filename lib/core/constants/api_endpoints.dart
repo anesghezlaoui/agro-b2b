@@ -1,8 +1,11 @@
 // lib/core/constants/api_endpoints.dart
 
 class ApiEndpoints {
-  // URL complète de ton backend Render
-  static const String baseUrl = 'http://127.0.0.1:8000';
+  /// Build : `flutter run --dart-define=API_BASE_URL=https://votre-api.example`
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://127.0.0.1:8000',
+  );
 
   // Endpoints de l’API
   static const String login = '/api/login';

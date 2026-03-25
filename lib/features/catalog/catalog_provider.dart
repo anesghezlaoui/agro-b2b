@@ -19,126 +19,8 @@ class CatalogProvider extends ChangeNotifier {
   CatalogProvider(this._repository);
   final CatalogRepository _repository;
 
-  final List<Product> _products = [
-    Product(
-      id: 1,
-      name: 'Huile tournesol 5L',
-      categoryPath: ['Alimentaire', 'Huiles'],
-      price: 2450,
-      stock: 120,
-      imageUrl: 'https://picsum.photos/seed/huile5l/400/300',
-      unitType: UnitType.carton,
-      variantLabel: 'Tournesol',
-      isPromo: true,
-      isTopSeller: true,
-    ),
-    Product(
-      id: 2,
-      name: 'Sucre cristal 1kg',
-      categoryPath: ['Épicerie', 'Sucres'],
-      price: 130,
-      stock: 320,
-      imageUrl: 'https://picsum.photos/seed/sucre1kg/400/300',
-      unitType: UnitType.piece,
-      isTopSeller: true,
-    ),
-    Product(
-      id: 3,
-      name: 'Tomate concentrée 400g',
-      categoryPath: ['Conserve', 'Tomate'],
-      price: 95,
-      stock: 560,
-      imageUrl: 'https://picsum.photos/seed/tomate400/400/300',
-      unitType: UnitType.piece,
-      isNew: true,
-    ),
-    Product(
-      id: 4,
-      name: 'Eau minérale 1.5L (pack)',
-      categoryPath: ['Boissons', 'Eau'],
-      price: 180,
-      stock: 800,
-      imageUrl: 'https://picsum.photos/seed/eau15/400/300',
-      unitType: UnitType.carton,
-      isTopSeller: true,
-    ),
-    Product(
-      id: 5,
-      name: 'Jus d\'orange 1L',
-      categoryPath: ['Boissons', 'Jus'],
-      price: 220,
-      stock: 200,
-      imageUrl: 'https://picsum.photos/seed/jusorange/400/300',
-      unitType: UnitType.piece,
-      isPromo: true,
-    ),
-    Product(
-      id: 6,
-      name: 'Soda cola 33cl (pack)',
-      categoryPath: ['Boissons', 'Soda'],
-      price: 420,
-      stock: 150,
-      imageUrl: 'https://picsum.photos/seed/cola/400/300',
-      unitType: UnitType.carton,
-    ),
-    Product(
-      id: 7,
-      name: 'Pommes Golden (caisse)',
-      categoryPath: ['Fruits & Légumes', 'Fruits'],
-      price: 3500,
-      stock: 45,
-      imageUrl: 'https://picsum.photos/seed/pommes/400/300',
-      unitType: UnitType.carton,
-      isTopSeller: true,
-    ),
-    Product(
-      id: 8,
-      name: 'Tomates rondes (caisse)',
-      categoryPath: ['Fruits & Légumes', 'Légumes'],
-      price: 1800,
-      stock: 60,
-      imageUrl: 'https://picsum.photos/seed/tomates/400/300',
-      unitType: UnitType.carton,
-      isNew: true,
-    ),
-    Product(
-      id: 9,
-      name: 'Lait UHT 1L',
-      categoryPath: ['Boissons', 'Lait'],
-      price: 145,
-      stock: 400,
-      imageUrl: 'https://picsum.photos/seed/laituht/400/300',
-      unitType: UnitType.piece,
-    ),
-    Product(
-      id: 10,
-      name: 'Riz parfumé 5kg',
-      categoryPath: ['Épicerie', 'Riz & pâtes'],
-      price: 890,
-      stock: 90,
-      imageUrl: 'https://picsum.photos/seed/riz5/400/300',
-      unitType: UnitType.piece,
-      isPromo: true,
-    ),
-    Product(
-      id: 11,
-      name: 'Papier hygiénique (pack)',
-      categoryPath: ['Hygiène', 'Papier'],
-      price: 320,
-      stock: 200,
-      imageUrl: 'https://picsum.photos/seed/papier/400/300',
-      unitType: UnitType.carton,
-    ),
-    Product(
-      id: 12,
-      name: 'Haricots verts 400g',
-      categoryPath: ['Conserve', 'Légumes'],
-      price: 110,
-      stock: 300,
-      imageUrl: 'https://picsum.photos/seed/haricots/400/300',
-      unitType: UnitType.piece,
-    ),
-  ];
+  /// Catalogue chargé uniquement depuis l’API (aucun fallback mock).
+  final List<Product> _products = [];
 
   String _query = '';
   String _categoryFilter = 'Tous';
@@ -318,13 +200,13 @@ class CatalogProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final remoteProducts = await _repository.fetchProducts();
-      if (remoteProducts.isNotEmpty) {
-        _products
-          ..clear()
-          ..addAll(remoteProducts);
-      }
+      _products
+        ..clear()
+        ..addAll(remoteProducts);
     } catch (_) {
-      _errorMessage = 'Catalogue hors ligne, données locales affichées.';
+      _products.clear();
+      _errorMessage =
+          'Impossible de charger le catalogue. Vérifiez la connexion et l’URL du serveur.';
     } finally {
       _isLoading = false;
       notifyListeners();
