@@ -1,0 +1,73 @@
+/* Thème admin Django — cohérence AgroB2B */
+:root {
+  --agro-admin-primary: #1b5e20;
+  --agro-admin-primary-light: #2e7d32;
+  --agro-admin-bg: #f6f8f6;
+}
+
+html[data-theme="light"],
+:root {
+  --header-bg: var(--agro-admin-primary);
+  --breadcrumbs-fg: #e8f5e9;
+  --link-fg: #1b5e20;
+}
+
+#header {
+  background: var(--agro-admin-primary);
+}
+
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: var(--agro-admin-primary-light);
+}
+
+.button.default,
+input[type="submit"].default,
+.submit-row input.default {
+  background: var(--agro-admin-primary);
+}
+
+.button.default:active,
+input[type="submit"].default:active,
+.submit-row input.default:active {
+  background: #0d3d12;
+}
+
+#user-tools a:link,
+#user-tools a:visited {
+  color: #e8f5e9;
+}
+
+body.login {
+  background: var(--agro-admin-bg);
+}
+
+.login #header {
+  background: var(--agro-admin-primary);
+}
+
+.agro-admin-toplink {
+  display: inline-block;
+  margin-left: 16px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+.agro-admin-toplink a {
+  color: #c8e6c9 !important;
+  text-decoration: none;
+}
+
+.agro-admin-toplink a:hover {
+  color: #fff !important;
+  text-decoration: underline;
+}

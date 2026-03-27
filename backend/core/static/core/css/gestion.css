@@ -1,0 +1,318 @@
+/* Portail de gestion AgroB2B */
+:root {
+  --agro-bg: #f4f7f4;
+  --agro-surface: #ffffff;
+  --agro-primary: #1b5e20;
+  --agro-primary-hover: #2e7d32;
+  --agro-accent: #33691e;
+  --agro-text: #1a1c1a;
+  --agro-muted: #5c6b5c;
+  --agro-border: #dce5dc;
+  --agro-danger: #b71c1c;
+  --agro-radius: 14px;
+  --agro-shadow: 0 4px 24px rgba(27, 94, 32, 0.08);
+  --agro-font: "DM Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body.gestion-body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--agro-font);
+  background: var(--agro-bg);
+  color: var(--agro-text);
+  line-height: 1.5;
+}
+
+.gestion-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.gestion-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #1b5e20 0%, #0d3d12 100%);
+  color: #e8f5e9;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gestion-brand {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  color: #fff;
+}
+
+.gestion-brand span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.gestion-nav {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gestion-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.gestion-nav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.gestion-nav a.is-active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.gestion-nav-logout {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.gestion-nav-logout button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.gestion-nav-logout button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.gestion-sidebar-foot {
+  margin-top: auto;
+  padding-top: 24px;
+  font-size: 0.75rem;
+  opacity: 0.65;
+  line-height: 1.4;
+}
+
+.gestion-main {
+  flex: 1;
+  padding: 32px 40px 48px;
+  max-width: 1200px;
+}
+
+.gestion-header h1 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.gestion-header p.lead {
+  margin: 0 0 28px;
+  color: var(--agro-muted);
+  font-size: 1.05rem;
+  max-width: 52ch;
+}
+
+.gestion-alert {
+  padding: 14px 18px;
+  border-radius: var(--agro-radius);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.gestion-alert--error {
+  background: #ffebee;
+  color: var(--agro-danger);
+  border: 1px solid #ffcdd2;
+}
+
+.gestion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.gestion-card {
+  background: var(--agro-surface);
+  border-radius: var(--agro-radius);
+  padding: 22px 22px 20px;
+  border: 1px solid var(--agro-border);
+  box-shadow: var(--agro-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gestion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(27, 94, 32, 0.12);
+}
+
+.gestion-card h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.gestion-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--agro-muted);
+  flex: 1;
+}
+
+.gestion-stat {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--agro-primary);
+  line-height: 1;
+}
+
+.gestion-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.gestion-btn--primary {
+  background: var(--agro-primary);
+  color: #fff;
+}
+
+.gestion-btn--primary:hover {
+  background: var(--agro-primary-hover);
+}
+
+.gestion-btn--ghost {
+  background: transparent;
+  color: var(--agro-primary);
+  border: 2px solid var(--agro-border);
+}
+
+.gestion-btn--ghost:hover {
+  border-color: var(--agro-primary);
+  background: rgba(27, 94, 32, 0.06);
+}
+
+.gestion-form-card {
+  max-width: 480px;
+  background: var(--agro-surface);
+  border-radius: var(--agro-radius);
+  padding: 28px;
+  border: 1px solid var(--agro-border);
+  box-shadow: var(--agro-shadow);
+}
+
+.gestion-field {
+  margin-bottom: 18px;
+}
+
+.gestion-field label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  color: var(--agro-text);
+}
+
+.gestion-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--agro-border);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.gestion-field input:focus {
+  outline: none;
+  border-color: var(--agro-primary);
+  box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.15);
+}
+
+.gestion-footnote {
+  margin-top: 32px;
+  font-size: 0.85rem;
+  color: var(--agro-muted);
+}
+
+@media (max-width: 900px) {
+  .gestion-layout {
+    flex-direction: column;
+  }
+
+  .gestion-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 16px 20px;
+  }
+
+  .gestion-brand span {
+    display: inline;
+    margin-left: 8px;
+  }
+
+  .gestion-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .gestion-sidebar-foot {
+    display: none;
+  }
+
+  .gestion-main {
+    padding: 24px 20px 40px;
+  }
+}
