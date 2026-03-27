@@ -16,9 +16,9 @@ SECRET_KEY = "django-insecure-^v@3qqm*fc4cyd^=2fr4dtjl==l)zhj*-4u1qli2$+6ov4l=l=
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Développement par défaut ; en prod : export DJANGO_DEBUG=false
-DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() in ("1", "true", "yes")
+DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() in ("1", "false", "yes")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [agro-b2b.onrender.com]
 
 
 INSTALLED_APPS = [
@@ -94,6 +94,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
