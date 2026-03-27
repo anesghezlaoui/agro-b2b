@@ -18,7 +18,7 @@ SECRET_KEY = "django-insecure-^v@3qqm*fc4cyd^=2fr4dtjl==l)zhj*-4u1qli2$+6ov4l=l=
 # Développement par défaut ; en prod : export DJANGO_DEBUG=false
 DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["agro-b2b.onrender.com"]
 
 
 INSTALLED_APPS = [
