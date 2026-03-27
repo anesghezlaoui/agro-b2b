@@ -67,12 +67,20 @@ class AuthProvider extends ChangeNotifier {
         phone: phone.trim(),
         password: password,
       );
+      final token = (data['token'] ?? data['access'] ?? '').toString();
+      if (token.isEmpty) {
+        _errorMessage = 'Réponse inscription invalide (token manquant).';
+        return false;
+      }
       _name = (data['name'] ?? data['nom'] ?? name).toString();
       _phone = (data['phone'] ?? data['telephone'] ?? phone).toString();
       _isValidatedByAdmin = (data['is_validated'] ?? false) == true;
+      _isAuthenticated = true;
+      await _apiClient.saveToken(token);
       await _storage.write(key: 'phone', value: _phone);
       await _storage.write(key: 'name', value: _name);
       await _storage.write(key: 'is_validated', value: '$_isValidatedByAdmin');
+      notifyListeners();
       return true;
     } on ApiException catch (e) {
       _errorMessage = e.message;
@@ -126,13 +134,34 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> markValidatedByAdmin() async {
     _isValidatedByAdmin = true;
+    await _storage.write(key: 'is_validated', value: 'true');
     notifyListeners();
+  }
+
+  /// Recharge le statut depuis l’API (après validation par l’admin).
+  Future<bool> refreshSession() async {
+    try {
+      final data = await _repository.fetchSession();
+      _isValidatedByAdmin = (data['is_validated'] ?? false) == true;
+      _name = (data['name'] ?? data['nom'] ?? _name).toString();
+      _phone = (data['phone'] ?? data['telephone'] ?? _phone).toString();
+      await _storage.write(key: 'is_validated', value: '$_isValidatedByAdmin');
+      await _storage.write(key: 'name', value: _name);
+      await _storage.write(key: 'phone', value: _phone);
+      notifyListeners();
+      return _isValidatedByAdmin;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> logout() async {
     _isAuthenticated = false;
     _isValidatedByAdmin = false;
     await _apiClient.clearToken();
+    await _storage.delete(key: 'name');
+    await _storage.delete(key: 'phone');
+    await _storage.delete(key: 'is_validated');
     notifyListeners();
   }
 

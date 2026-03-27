@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/category_meta.dart';
 import '../../models/product.dart';
 import 'catalog_repository.dart';
 
@@ -21,6 +22,7 @@ class CatalogProvider extends ChangeNotifier {
 
   /// Catalogue chargé uniquement depuis l’API (aucun fallback mock).
   final List<Product> _products = [];
+  List<CategoryMeta> _categoryMeta = [];
 
   String _query = '';
   String _categoryFilter = 'Tous';
@@ -67,6 +69,17 @@ class CatalogProvider extends ChangeNotifier {
         .length;
   }
 
+  int subcategoryCountInMain(String main) {
+    final subs = <String>{};
+    for (final p in _products) {
+      if (p.categoryPath.isEmpty || p.categoryPath.first != main) continue;
+      if (p.categoryPath.length >= 2) {
+        subs.add(p.categoryPath[1]);
+      }
+    }
+    return subs.length;
+  }
+
   bool mainHasPromo(String main) {
     return _products.any(
       (p) =>
@@ -85,7 +98,20 @@ class CatalogProvider extends ChangeNotifier {
     );
   }
 
+  /// Rayons racine renvoyés par l’API `/api/categories` (image + icône admin).
+  CategoryMeta? metaForMainCategory(String main) {
+    for (final c in _categoryMeta) {
+      if (c.parentId == null && c.name == main) return c;
+    }
+    return null;
+  }
+
   String? representativeImageForMain(String main) {
+    final meta = metaForMainCategory(main);
+    if (meta != null && !meta.showImage) return "";
+    if (meta != null && meta.showImage && meta.imageUrl.isNotEmpty) {
+      return meta.imageUrl;
+    }
     for (final p in _products) {
       if (p.categoryPath.isNotEmpty &&
           p.categoryPath.first == main &&
@@ -199,12 +225,20 @@ class CatalogProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
+      var categories = <CategoryMeta>[];
+      try {
+        categories = await _repository.fetchCategories();
+      } catch (_) {
+        // Les catégories enrichissent l’UI ; le catalogue reste utilisable sans.
+      }
       final remoteProducts = await _repository.fetchProducts();
+      _categoryMeta = categories;
       _products
         ..clear()
         ..addAll(remoteProducts);
     } catch (_) {
       _products.clear();
+      _categoryMeta = [];
       _errorMessage =
           'Impossible de charger le catalogue. Vérifiez la connexion et l’URL du serveur.';
     } finally {

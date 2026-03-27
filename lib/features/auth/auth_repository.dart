@@ -27,4 +27,8 @@ class AuthRepository {
       body: {'name': name, 'phone': phone, 'password': password},
     );
   }
+
+  Future<Map<String, dynamic>> fetchSession() {
+    return _apiClient.getJson(ApiEndpoints.me);
+  }
 }

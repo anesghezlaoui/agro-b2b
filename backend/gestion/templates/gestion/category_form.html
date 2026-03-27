@@ -1,0 +1,30 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}{% if object %}Modifier la catégorie{% else %}Nouvelle catégorie{% endif %}{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>{% if object %}Modifier « {{ object.name }} »{% else %}Nouvelle catégorie{% endif %}</h1>
+      <p>Définissez le nom, la hiérarchie et les visuels pour l’app mobile.</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:category_list' %}">← Retour à la liste</a>
+  </header>
+
+  <div class="gestion-panel" style="padding:24px;">
+    <form method="post" enctype="multipart/form-data" class="gestion-form-grid">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<ul class="errorlist">{{ form.non_field_errors }}</ul>{% endif %}
+      {% for field in form %}
+        <div class="gestion-form-row">
+          <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<p class="gestion-muted" style="margin:6px 0 0;">{{ field.help_text }}</p>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <div class="gestion-toolbar" style="margin-top:8px;">
+        <button class="gestion-btn gestion-btn--primary" type="submit">Enregistrer</button>
+        <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:category_list' %}">Annuler</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

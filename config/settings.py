@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "core",
     "commerce",
+    "gestion",
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,11 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # Certains environnements (symlinks / wrapper de dossier) peuvent rendre
         # la découverte via APP_DIRS moins fiable. On ajoute le dossier templates explicite.
-        "DIRS": [str(BASE_DIR / "core" / "templates")],
+        "DIRS": [
+            str(BASE_DIR / "core" / "templates"),
+            # App explicite : manage.py vit dans backend/ ; APP_DIRS + gestion parfois non résolu selon cwd.
+            str(BASE_DIR / "gestion" / "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

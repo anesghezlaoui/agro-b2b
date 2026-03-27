@@ -1,0 +1,64 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Catégories{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Catégories</h1>
+      <p>Rayons, images bannière et icônes visibles dans l’application.</p>
+    </div>
+    <div class="gestion-toolbar">
+      <form class="gestion-search" method="get" action="">
+        <input type="text" name="q" value="{{ search_q }}" placeholder="Rechercher…" />
+        <button class="gestion-btn gestion-btn--ghost" type="submit">Filtrer</button>
+      </form>
+      <a class="gestion-btn gestion-btn--primary" href="{% url 'gestion:category_create' %}">+ Nouvelle catégorie</a>
+    </div>
+  </header>
+
+  <div class="gestion-panel">
+    <div class="gestion-table-wrap">
+      <table class="gestion-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Parent</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in categories %}
+            <tr>
+              <td>
+                {% if c.image %}
+                  <img class="gestion-thumb" src="{{ c.image.url }}" alt="" />
+                {% else %}
+                  <span class="gestion-muted">—</span>
+                {% endif %}
+              </td>
+              <td><strong>{{ c.name }}</strong></td>
+              <td class="gestion-muted">{% if c.parent %}{{ c.parent.name }}{% else %}—{% endif %}</td>
+              <td class="gestion-actions">
+                <a class="gestion-link" href="{% url 'gestion:category_update' c.pk %}">Modifier</a>
+                <a class="gestion-link" href="{% url 'gestion:category_delete' c.pk %}">Supprimer</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="gestion-muted" style="text-align:center;padding:32px;">Aucune catégorie.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.has_other_pages %}
+      <div class="gestion-pagination">
+        {% if page_obj.has_previous %}
+          <a class="gestion-link" href="?page={{ page_obj.previous_page_number }}{% if search_q %}&q={{ search_q|urlencode }}{% endif %}">← Précédent</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a class="gestion-link" href="?page={{ page_obj.next_page_number }}{% if search_q %}&q={{ search_q|urlencode }}{% endif %}">Suivant →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

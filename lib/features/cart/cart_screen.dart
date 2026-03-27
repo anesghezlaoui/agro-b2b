@@ -10,39 +10,19 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
-      builder: (context, cart, _) {
-        final canGoBack = (ModalRoute.of(context)?.canPop ?? false);
-        if (cart.items.isEmpty) {
-          return SafeArea(
-            child: Column(
-              children: [
-                if (canGoBack)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      tooltip: 'Retour',
-                      icon: const Icon(Icons.arrow_back_rounded),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                const Expanded(child: Center(child: Text('Panier vide'))),
-              ],
-            ),
-          );
-        }
-        return SafeArea(
-          child: Column(
+    final canGoBack = (ModalRoute.of(context)?.canPop ?? false);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Panier'),
+        automaticallyImplyLeading: canGoBack,
+      ),
+      body: Consumer<CartProvider>(
+        builder: (context, cart, _) {
+          if (cart.items.isEmpty) {
+            return const Center(child: Text('Panier vide'));
+          }
+          return Column(
             children: [
-              if (canGoBack)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    tooltip: 'Retour',
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: cart.items.length,
@@ -51,22 +31,20 @@ class CartScreen extends StatelessWidget {
                     return ListTile(
                       title: Text(item.product.name),
                       subtitle: Text(
-                        '${item.product.unitType.name} • ${item.product.price.toStringAsFixed(0)} DA',
+                        '${item.unitLabel} • ${item.unitPrice.toStringAsFixed(0)} DA',
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            onPressed: () => context
-                                .read<CartProvider>()
-                                .decrement(item.product.id),
+                            onPressed: () =>
+                                context.read<CartProvider>().decrement(item),
                             icon: const Icon(Icons.remove_circle_outline),
                           ),
                           Text('${item.quantity}'),
                           IconButton(
-                            onPressed: () => context
-                                .read<CartProvider>()
-                                .increment(item.product.id),
+                            onPressed: () =>
+                                context.read<CartProvider>().increment(item),
                             icon: const Icon(Icons.add_circle_outline),
                           ),
                         ],
@@ -93,9 +71,9 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

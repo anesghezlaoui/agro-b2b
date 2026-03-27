@@ -1,0 +1,153 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}{% if object %}Modifier le produit{% else %}Nouveau produit{% endif %}{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>{% if object %}Modifier « {{ object.name }} »{% else %}Nouveau produit{% endif %}</h1>
+      <p>Fiche produit, image, conditionnements et variantes (libellés optionnels pour l’API).</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:product_list' %}">← Retour au catalogue</a>
+  </header>
+
+  <div class="gestion-panel" style="padding:24px;">
+    <form method="post" enctype="multipart/form-data" class="gestion-form-grid gestion-form-grid--wide">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<ul class="errorlist">{{ form.non_field_errors }}</ul>{% endif %}
+
+      {% if object and object.image %}
+        <div class="gestion-form-row">
+          <span class="gestion-label">Image actuelle</span>
+          <img class="gestion-thumb" style="width:120px;height:120px;" src="{{ object.image.url }}" alt="" />
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        <div class="gestion-form-row">
+          <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<p class="gestion-muted" style="margin:6px 0 0;">{{ field.help_text }}</p>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+
+      <div class="gestion-inline-set">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+          <h3 style="margin:0;">Conditionnements (par produit)</h3>
+          <button type="button" class="gestion-btn gestion-btn--ghost" id="add-conditionnement-btn">+ Ajouter conditionnement</button>
+        </div>
+        {{ conditionnement_formset.management_form }}
+        {% if conditionnement_formset.non_form_errors %}
+          <ul class="errorlist">{{ conditionnement_formset.non_form_errors }}</ul>
+        {% endif %}
+        <div id="conditionnement-rows">
+        {% for cf in conditionnement_formset.forms %}
+          <div class="conditionnement-row" style="display:grid;grid-template-columns:1.1fr .9fr .9fr .9fr .8fr .8fr 1fr auto;gap:12px;align-items:end;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--agro-border);">
+            {% for field in cf.hidden_fields %}{{ field }}{% endfor %}
+            {% for field in cf.visible_fields %}
+              {% if field.name != 'DELETE' %}
+              <div>
+                <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+              </div>
+              {% endif %}
+            {% endfor %}
+            <div style="display:flex;justify-content:flex-end;">
+              {% if cf.DELETE %}
+                <label style="display:none;">{{ cf.DELETE }}</label>
+                <button type="button" class="gestion-btn-delete-row" title="Supprimer ce conditionnement" aria-label="Supprimer ce conditionnement" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--agro-border);background:#fff;color:#b71c1c;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm1 7h2v8h-2v-8Zm4 0h2v8h-2v-8ZM7 10h2v8H7v-8Zm-1 12h12a2 2 0 0 0 2-2V8H4v12a2 2 0 0 0 2 2Z"/>
+                  </svg>
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+
+        <template id="conditionnement-empty-form">
+          <div class="conditionnement-row" style="display:grid;grid-template-columns:1.1fr .9fr .9fr .9fr .8fr .8fr 1fr auto;gap:12px;align-items:end;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--agro-border);">
+            {% for field in conditionnement_formset.empty_form.hidden_fields %}{{ field }}{% endfor %}
+            {% for field in conditionnement_formset.empty_form.visible_fields %}
+              {% if field.name != 'DELETE' %}
+              <div>
+                <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+              </div>
+              {% endif %}
+            {% endfor %}
+            <div style="display:flex;justify-content:flex-end;">
+              {% if conditionnement_formset.empty_form.DELETE %}
+                <label style="display:none;">{{ conditionnement_formset.empty_form.DELETE }}</label>
+                <button type="button" class="gestion-btn-delete-row" title="Supprimer ce conditionnement" aria-label="Supprimer ce conditionnement" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--agro-border);background:#fff;color:#b71c1c;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm1 7h2v8h-2v-8Zm4 0h2v8h-2v-8ZM7 10h2v8H7v-8Zm-1 12h12a2 2 0 0 0 2-2V8H4v12a2 2 0 0 0 2 2Z"/>
+                  </svg>
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <div class="gestion-inline-set">
+        <h3>Variantes (optionnel)</h3>
+        {{ variant_formset.management_form }}
+        {% if variant_formset.non_form_errors %}
+          <ul class="errorlist">{{ variant_formset.non_form_errors }}</ul>
+        {% endif %}
+        {% for vf in variant_formset.forms %}
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--agro-border);">
+            {% for field in vf.hidden_fields %}{{ field }}{% endfor %}
+            {% for field in vf.visible_fields %}
+              <div>
+                <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="gestion-toolbar" style="margin-top:8px;">
+        <button class="gestion-btn gestion-btn--primary" type="submit">Enregistrer</button>
+        <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:product_list' %}">Annuler</a>
+      </div>
+    </form>
+  </div>
+  <script>
+    (function () {
+      const addBtn = document.getElementById('add-conditionnement-btn');
+      const rowsWrap = document.getElementById('conditionnement-rows');
+      const tpl = document.getElementById('conditionnement-empty-form');
+      const totalInput = document.getElementById('id_conditionnements-TOTAL_FORMS');
+      if (!addBtn || !rowsWrap || !tpl || !totalInput) return;
+
+      function bindDeleteButton(row) {
+        const deleteInput = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+        const deleteBtn = row.querySelector('.gestion-btn-delete-row');
+        if (!deleteInput || !deleteBtn) return;
+        deleteBtn.addEventListener('click', function () {
+          deleteInput.checked = !deleteInput.checked;
+          row.style.opacity = deleteInput.checked ? '0.45' : '1';
+        });
+      }
+
+      rowsWrap.querySelectorAll('.conditionnement-row').forEach(bindDeleteButton);
+
+      addBtn.addEventListener('click', function () {
+        const formIndex = parseInt(totalInput.value, 10);
+        const html = tpl.innerHTML.replaceAll('__prefix__', String(formIndex));
+        const host = document.createElement('div');
+        host.innerHTML = html.trim();
+        const row = host.firstElementChild;
+        if (!row) return;
+        rowsWrap.appendChild(row);
+        totalInput.value = String(formIndex + 1);
+        bindDeleteButton(row);
+      });
+    })();
+  </script>
+{% endblock %}

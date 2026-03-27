@@ -1,0 +1,367 @@
+/* Console type plateforme (tableaux, toolbars, fiches) */
+.gestion-console {
+  max-width: 1280px;
+}
+
+.gestion-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.gestion-page-head h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.gestion-page-head p {
+  margin: 6px 0 0;
+  color: var(--agro-muted);
+  font-size: 0.95rem;
+  max-width: 42ch;
+}
+
+.gestion-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.gestion-messages {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gestion-toast {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.gestion-toast--success,
+.gestion-toast--debug {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #a5d6a7;
+}
+
+.gestion-toast--error,
+.gestion-toast--danger {
+  background: #ffebee;
+  color: #b71c1c;
+  border: 1px solid #ffcdd2;
+}
+
+.gestion-toast--warning {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffe082;
+}
+
+.gestion-toast--info {
+  background: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #90caf9;
+}
+
+.gestion-panel {
+  background: var(--agro-surface);
+  border-radius: var(--agro-radius);
+  border: 1px solid var(--agro-border);
+  box-shadow: var(--agro-shadow);
+  overflow: hidden;
+}
+
+.gestion-table-wrap {
+  overflow-x: auto;
+}
+
+table.gestion-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+table.gestion-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: #f1f5f1;
+  font-weight: 700;
+  color: var(--agro-text);
+  border-bottom: 1px solid var(--agro-border);
+  white-space: nowrap;
+}
+
+table.gestion-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eef2ee;
+  vertical-align: middle;
+}
+
+table.gestion-table tr:last-child td {
+  border-bottom: none;
+}
+
+table.gestion-table tbody tr:hover td {
+  background: #fafcfa;
+}
+
+.gestion-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #eee;
+}
+
+.gestion-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.gestion-badge--ok {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.gestion-badge--wait {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+.gestion-badge--ship {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.gestion-badge--done {
+  background: #eceff1;
+  color: #455a64;
+}
+
+.gestion-badge--off {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.gestion-link {
+  color: var(--agro-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.gestion-link:hover {
+  text-decoration: underline;
+}
+
+.gestion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.gestion-form-grid {
+  display: grid;
+  gap: 18px;
+  max-width: 720px;
+}
+
+.gestion-form-grid--wide {
+  max-width: 960px;
+}
+
+.gestion-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-bottom: 6px;
+}
+
+.gestion-input,
+.gestion-select {
+  width: 100%;
+  max-width: 480px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--agro-border);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.gestion-input:focus,
+.gestion-select:focus {
+  outline: none;
+  border-color: var(--agro-primary);
+  box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.12);
+}
+
+.gestion-input--sm {
+  max-width: none;
+}
+
+.gestion-file {
+  font-size: 0.88rem;
+}
+
+.gestion-check {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--agro-primary);
+}
+
+.gestion-form-row {
+  margin-bottom: 4px;
+}
+
+ul.errorlist {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--agro-danger);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.gestion-search {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gestion-search input[type="text"],
+.gestion-search select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--agro-border);
+  font-family: inherit;
+  min-width: 200px;
+}
+
+.gestion-pagination {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
+  border-top: 1px solid var(--agro-border);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.gestion-inline-set {
+  margin-top: 8px;
+  padding: 16px;
+  background: #f8faf8;
+  border-radius: 12px;
+  border: 1px dashed var(--agro-border);
+}
+
+.gestion-inline-set h3 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.gestion-auth-body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: var(--agro-font);
+  background: linear-gradient(145deg, #e8f5e9 0%, #f4f7f4 45%, #e3f2fd 100%);
+}
+
+.gestion-auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 20px 60px rgba(27, 94, 32, 0.12);
+  border: 1px solid var(--agro-border);
+}
+
+.gestion-auth-card h1 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.gestion-auth-card .lead {
+  margin: 0 0 24px;
+  color: var(--agro-muted);
+  font-size: 0.95rem;
+}
+
+.gestion-auth-brand {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--agro-primary);
+}
+
+.gestion-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.gestion-stat-card {
+  background: var(--agro-surface);
+  border-radius: var(--agro-radius);
+  padding: 20px;
+  border: 1px solid var(--agro-border);
+  box-shadow: var(--agro-shadow);
+}
+
+.gestion-stat-card .val {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--agro-primary);
+  line-height: 1.1;
+}
+
+.gestion-stat-card .lbl {
+  font-size: 0.85rem;
+  color: var(--agro-muted);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.gestion-order-items {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.gestion-order-items th,
+.gestion-order-items td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--agro-border);
+}
+
+.gestion-muted {
+  color: var(--agro-muted);
+  font-size: 0.88rem;
+}

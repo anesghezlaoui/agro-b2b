@@ -1,0 +1,59 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1b5e20" />
+    <title>{% block gestion_title %}Console{% endblock %} · AgroB2B</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'core/css/gestion.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/gestion_console.css' %}" />
+    {% block gestion_extra_head %}{% endblock %}
+  </head>
+  <body class="gestion-body">
+    <div class="gestion-layout">
+      <aside class="gestion-sidebar" aria-label="Navigation">
+        <p class="gestion-brand">
+          AgroB2B
+          <span>Console pro</span>
+        </p>
+        {% block gestion_nav %}
+          {% with sn=request.resolver_match.url_name %}
+          <nav class="gestion-nav">
+            <a href="{% url 'gestion:dashboard' %}" {% if sn == 'dashboard' %}class="is-active"{% endif %}>Tableau de bord</a>
+            <a href="{% url 'gestion:product_list' %}" {% if sn == 'product_list' or sn == 'product_create' or sn == 'product_update' or sn == 'product_delete' %}class="is-active"{% endif %}>Produits</a>
+            <a href="{% url 'gestion:category_list' %}" {% if sn == 'category_list' or sn == 'category_create' or sn == 'category_update' or sn == 'category_delete' %}class="is-active"{% endif %}>Catégories</a>
+            <a href="{% url 'gestion:order_list' %}" {% if sn == 'order_list' or sn == 'order_detail' %}class="is-active"{% endif %}>Commandes</a>
+            <a href="{% url 'gestion:client_list' %}" {% if sn == 'client_list' or sn == 'client_update' %}class="is-active"{% endif %}>Clients</a>
+            <a href="{% url 'gestion:user_list' %}" {% if sn == 'user_list' or sn == 'user_create' %}class="is-active"{% endif %}>Équipe</a>
+            <a href="/api/docs/" target="_blank" rel="noopener">API Swagger</a>
+            <form class="gestion-nav-logout" method="post" action="{% url 'gestion:logout' %}">
+              {% csrf_token %}
+              <button type="submit">Déconnexion</button>
+            </form>
+          </nav>
+          {% endwith %}
+        {% endblock %}
+        <p class="gestion-sidebar-foot">
+          Interface dédiée — catalogue et commandes alignés avec l’app mobile.
+        </p>
+      </aside>
+      <main class="gestion-main gestion-console">
+        {% if messages %}
+          <div class="gestion-messages" role="status">
+            {% for message in messages %}
+              <div class="gestion-toast gestion-toast--{{ message.tags|default:'info' }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% block gestion_content %}{% endblock %}
+      </main>
+    </div>
+  </body>
+</html>

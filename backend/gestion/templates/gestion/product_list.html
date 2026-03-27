@@ -1,0 +1,80 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Produits{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Produits</h1>
+      <p>Catalogue, médias et indicateurs visibles côté application.</p>
+    </div>
+    <div class="gestion-toolbar">
+      <form class="gestion-search" method="get" action="">
+        <input type="text" name="q" value="{{ search_q }}" placeholder="Nom ou catégorie…" />
+        <select name="category">
+          <option value="">Toutes catégories</option>
+          {% for c in all_categories %}
+            <option value="{{ c.pk }}" {% if category_filter and category_filter|add:0 == c.pk %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+        <button class="gestion-btn gestion-btn--ghost" type="submit">Filtrer</button>
+      </form>
+      <a class="gestion-btn gestion-btn--primary" href="{% url 'gestion:product_create' %}">+ Nouveau produit</a>
+    </div>
+  </header>
+
+  <div class="gestion-panel">
+    <div class="gestion-table-wrap">
+      <table class="gestion-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Produit</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Stock</th>
+            <th>Tags</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+            <tr>
+              <td>
+                {% if p.image %}
+                  <img class="gestion-thumb" src="{{ p.image.url }}" alt="" />
+                {% elif p.image_url %}
+                  <img class="gestion-thumb" src="{{ p.image_url }}" alt="" />
+                {% else %}<span class="gestion-muted">—</span>{% endif %}
+              </td>
+              <td><strong>{{ p.name }}</strong></td>
+              <td class="gestion-muted">{% if p.category %}{{ p.category.name }}{% else %}—{% endif %}</td>
+              <td>{{ p.price }} DA</td>
+              <td>{{ p.stock }}</td>
+              <td>
+                {% if p.is_promo %}<span class="gestion-badge gestion-badge--off">Promo</span>{% endif %}
+                {% if p.is_top_seller %}<span class="gestion-badge gestion-badge--ok">Top</span>{% endif %}
+                {% if p.is_new %}<span class="gestion-badge gestion-badge--ship">New</span>{% endif %}
+              </td>
+              <td class="gestion-actions">
+                <a class="gestion-link" href="{% url 'gestion:product_update' p.pk %}">Modifier</a>
+                <a class="gestion-link" href="{% url 'gestion:product_delete' p.pk %}">Supprimer</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="7" class="gestion-muted" style="text-align:center;padding:32px;">Aucun produit.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.has_other_pages %}
+      <div class="gestion-pagination">
+        {% if page_obj.has_previous %}
+          <a class="gestion-link" href="?page={{ page_obj.previous_page_number }}{% if search_q %}&q={{ search_q|urlencode }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">← Précédent</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a class="gestion-link" href="?page={{ page_obj.next_page_number }}{% if search_q %}&q={{ search_q|urlencode }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">Suivant →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

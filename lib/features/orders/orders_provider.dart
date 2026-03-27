@@ -42,9 +42,9 @@ class OrdersProvider extends ChangeNotifier {
     } on ApiException catch (e) {
       _errorMessage = e.message;
       return false;
-    } catch (_) {
+    } catch (e) {
       _errorMessage =
-          'Impossible de joindre le serveur. Lance Django (port 8000) et vérifie l’URL API (voir README).';
+          'Erreur inattendue lors de la commande: $e';
       return false;
     } finally {
       _isLoading = false;
@@ -57,7 +57,13 @@ class OrdersProvider extends ChangeNotifier {
       Order(
         id: _nextId++,
         items: order.items
-            .map((e) => CartItem(product: e.product, quantity: e.quantity))
+            .map(
+              (e) => CartItem(
+                product: e.product,
+                quantity: e.quantity,
+                conditionnement: e.conditionnement,
+              ),
+            )
             .toList(),
         total: order.total,
         status: OrderStatus.pending,

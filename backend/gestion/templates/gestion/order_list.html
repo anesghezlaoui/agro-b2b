@@ -1,0 +1,67 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Commandes{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Commandes</h1>
+      <p>Suivi des statuts et des montants.</p>
+    </div>
+    <form class="gestion-search" method="get" action="">
+      <select name="status">
+        <option value="">Tous les statuts</option>
+        {% for val,label in status_choices %}
+          <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <button class="gestion-btn gestion-btn--ghost" type="submit">Filtrer</button>
+    </form>
+  </header>
+
+  <div class="gestion-panel">
+    <div class="gestion-table-wrap">
+      <table class="gestion-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Livraison</th>
+            <th>Statut</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in orders %}
+            <tr>
+              <td><strong>#{{ o.pk }}</strong></td>
+              <td>{{ o.client.phone }}{% if o.client.business_name %}<br/><span class="gestion-muted">{{ o.client.business_name }}</span>{% endif %}</td>
+              <td>{{ o.get_delivery_type_display }}</td>
+              <td>
+                {% if o.status == 'pending' %}<span class="gestion-badge gestion-badge--wait">{{ o.get_status_display }}</span>
+                {% elif o.status == 'delivered' %}<span class="gestion-badge gestion-badge--done">{{ o.get_status_display }}</span>
+                {% else %}<span class="gestion-badge gestion-badge--ship">{{ o.get_status_display }}</span>{% endif %}
+              </td>
+              <td>{{ o.total }} DA</td>
+              <td class="gestion-muted">{{ o.created_at|date:"d/m/Y H:i" }}</td>
+              <td><a class="gestion-link" href="{% url 'gestion:order_detail' o.pk %}">Détail</a></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="7" class="gestion-muted" style="text-align:center;padding:32px;">Aucune commande.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.has_other_pages %}
+      <div class="gestion-pagination">
+        {% if page_obj.has_previous %}
+          <a class="gestion-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter|urlencode }}{% endif %}">← Précédent</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a class="gestion-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter|urlencode }}{% endif %}">Suivant →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

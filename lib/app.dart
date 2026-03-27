@@ -7,6 +7,7 @@ import 'core/theme/app_theme.dart';
 import 'features/auth/auth_provider.dart';
 import 'features/auth/auth_repository.dart';
 import 'features/auth/auth_screen.dart';
+import 'features/auth/pending_validation_screen.dart';
 import 'features/cart/cart_provider.dart';
 import 'features/catalog/catalog_provider.dart';
 import 'features/catalog/catalog_repository.dart';
@@ -65,6 +66,9 @@ class AgroB2BApp extends StatelessWidget {
               );
             }
             if (!auth.isAuthenticated) return const AuthScreen();
+            if (!auth.isValidatedByAdmin) {
+              return const PendingValidationScreen();
+            }
             return const HomeShell();
           },
         ),

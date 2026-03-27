@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    CategoryListView,
     NotificationListView,
     NotificationMarkReadView,
     OrderListCreateView,
@@ -9,6 +10,7 @@ from .views import (
 )
 
 urlpatterns = [
+    path("categories", CategoryListView.as_view(), name="api-categories"),
     path("produits", ProductListView.as_view(), name="api-produits"),
     path("panier", PanierView.as_view(), name="api-panier"),
     path("commandes", OrderListCreateView.as_view(), name="api-commandes"),

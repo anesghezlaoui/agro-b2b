@@ -24,8 +24,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   String _search = '';
   bool _promoOnly = false;
   bool _newOnly = false;
-  int _priceSort =
-      0; // 0 none, 1 asc, 2 desc
+  int _priceSort = 0; // 0 none, 1 asc, 2 desc
 
   @override
   void initState() {
@@ -302,7 +301,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: 188,
+                    height: 310,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -311,8 +310,6 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         final p = products[i];
                         return ProductQuickTile(
                           product: p,
-                          onAdd: () =>
-                              context.read<CartProvider>().addProduct(p),
                         );
                       },
                     ),

@@ -24,6 +24,8 @@ class OrdersRepository {
           .map(
             (item) => {
               'product_id': item.product.id,
+              if (item.conditionnement != null)
+                'conditionnement_id': item.conditionnement!.id,
               'quantity': item.quantity,
             },
           )

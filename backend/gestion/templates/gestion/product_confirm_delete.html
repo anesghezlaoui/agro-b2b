@@ -1,0 +1,17 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Supprimer le produit{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Supprimer le produit</h1>
+      <p>Confirmez la suppression de « {{ object.name }} ». Impossible si le produit est lié à des commandes (protection).</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:product_list' %}">Annuler</a>
+  </header>
+  <div class="gestion-panel" style="padding:24px;">
+    <form method="post">
+      {% csrf_token %}
+      <button class="gestion-btn gestion-btn--primary" type="submit" style="background:var(--agro-danger);border:none;">Confirmer la suppression</button>
+    </form>
+  </div>
+{% endblock %}

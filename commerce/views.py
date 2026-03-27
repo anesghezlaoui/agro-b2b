@@ -6,14 +6,34 @@ from rest_framework.views import APIView
 
 from core.permissions import IsValidatedClient
 
-from .models import Notification, Order, Product
+from .models import Category, Notification, Order, Product
 from .serializers import (
+    CategorySerializer,
     NotificationSerializer,
     OrderCreateSerializer,
     OrderSerializer,
     PanierSerializer,
     ProductSerializer,
 )
+
+
+class CategoryListView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsValidatedClient]
+
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="CategoriesResponse",
+                fields={"results": CategorySerializer(many=True)},
+            )
+        }
+    )
+    def get(self, request):
+        queryset = Category.objects.all().select_related("parent")
+        serializer = CategorySerializer(
+            queryset, many=True, context={"request": request}
+        )
+        return Response({"results": serializer.data})
 
 
 class ProductListView(APIView):
@@ -28,8 +48,14 @@ class ProductListView(APIView):
         }
     )
     def get(self, request):
-        queryset = Product.objects.all().select_related("category").prefetch_related("variants")
-        serializer = ProductSerializer(queryset, many=True)
+        queryset = (
+            Product.objects.all()
+            .select_related("category")
+            .prefetch_related("variants", "conditionnements")
+        )
+        serializer = ProductSerializer(
+            queryset, many=True, context={"request": request}
+        )
         return Response({"results": serializer.data})
 
 
@@ -77,7 +103,9 @@ class OrderListCreateView(APIView):
             .prefetch_related("items__product__variants", "items__product__category")
             .all()
         )
-        serializer = OrderSerializer(orders, many=True)
+        serializer = OrderSerializer(
+            orders, many=True, context={"request": request}
+        )
         return Response({"results": serializer.data})
 
     @extend_schema(
@@ -95,7 +123,7 @@ class OrderListCreateView(APIView):
         serializer = OrderCreateSerializer(data=request.data, context={"profile": profile})
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
-        output = OrderSerializer(order)
+        output = OrderSerializer(order, context={"request": request})
         return Response({"order": output.data}, status=status.HTTP_201_CREATED)
 
 

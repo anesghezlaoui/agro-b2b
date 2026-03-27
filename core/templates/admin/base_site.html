@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | AgroB2B{% endblock %}
+
+{% block branding %}
+  <div id="site-name">
+    <a href="{% url 'admin:index' %}">AgroB2B</a>
+    <span class="agro-admin-toplink">
+      <a href="/">← Tableau de bord</a>
+    </span>
+  </div>
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'core/css/django_admin_agro.css' %}" />
+  <link rel="stylesheet" href="{% static 'commerce/css/admin_commerce.css' %}" />
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Client #{{ object.pk }}{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Modifier le client</h1>
+      <p>Compte <strong>{{ readonly_user }}</strong> · téléphone <strong>{{ readonly_phone }}</strong> (non modifiable ici).</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:client_list' %}">← Liste clients</a>
+  </header>
+
+  <div class="gestion-panel" style="padding:24px;">
+    <form method="post" class="gestion-form-grid">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="gestion-form-row">
+          <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <div class="gestion-toolbar">
+        <button class="gestion-btn gestion-btn--primary" type="submit">Enregistrer</button>
+        <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:client_list' %}">Annuler</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,19 +1,12 @@
 from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
 from rest_framework import permissions, status
 from rest_framework.generics import get_object_or_404
-from django.shortcuts import render
-from django.shortcuts import redirect
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework.views import APIView
 
-from django.contrib.auth import login
-from django.contrib.auth.models import User
-
 from .models import ClientProfile
 from .serializers import LoginSerializer, RegisterSerializer
-
-from commerce.models import Category, Order, Product
 
 
 class RegisterView(APIView):
@@ -45,6 +38,42 @@ class RegisterView(APIView):
                 "is_validated": profile.is_validated,
             },
             status=status.HTTP_201_CREATED,
+        )
+
+
+class ClientSessionView(APIView):
+    """État du compte connecté (token) — pour actualiser is_validated après validation admin."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="ClientSessionResponse",
+                fields={
+                    "name": serializers.CharField(),
+                    "phone": serializers.CharField(),
+                    "is_validated": serializers.BooleanField(),
+                },
+            )
+        }
+    )
+    def get(self, request):
+        try:
+            profile = request.user.client_profile
+        except ClientProfile.DoesNotExist:
+            return Response(
+                {"detail": "Profil client introuvable."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        return Response(
+            {
+                "name": request.user.first_name
+                or profile.business_name
+                or "Client",
+                "phone": profile.phone,
+                "is_validated": profile.is_validated,
+            }
         )
 
 
@@ -101,79 +130,3 @@ class ValidateClientView(APIView):
         return Response(
             {"id": profile.id, "is_validated": profile.is_validated},
         )
-
-
-def admin_home(request):
-    # 1) S’il n’y a aucun utilisateur dans la DB, on propose l’ajout du premier superuser.
-    user_count = User.objects.count()
-    needs_superuser_setup = user_count == 0
-
-    # 2) Si l’utilisateur est déjà connecté et staff => afficher la gestion.
-    is_staff = bool(request.user and request.user.is_authenticated and request.user.is_staff)
-
-    # POST: création du 1er superuser
-    if request.method == "POST" and needs_superuser_setup:
-        username = (request.POST.get("username") or "").strip()
-        password1 = request.POST.get("password1") or ""
-        password2 = request.POST.get("password2") or ""
-
-        context = {"needs_superuser_setup": True, "is_staff": False, "error": None}
-
-        if not username:
-            context["error"] = "Le nom d’utilisateur est requis."
-            return render(request, "core/admin_home.html", context)
-
-        if not password1 or len(password1) < 8:
-            context["error"] = "Le mot de passe doit contenir au moins 8 caractères."
-            return render(request, "core/admin_home.html", context)
-
-        if password1 != password2:
-            context["error"] = "Les deux mots de passe ne correspondent pas."
-            return render(request, "core/admin_home.html", context)
-
-        # Création du premier superutilisateur
-        created = User.objects.create_user(
-            username=username,
-            password=password1,
-            is_staff=True,
-            is_superuser=True,
-        )
-        login(request, created)
-        return redirect("admin-home")
-
-    # GET: si aucun utilisateur => afficher le formulaire de création
-    if needs_superuser_setup:
-        return render(
-            request,
-            "core/admin_home.html",
-            {
-                "needs_superuser_setup": True,
-                "is_staff": False,
-                "existing_user_count": 0,
-            },
-        )
-
-    # Si des users existent mais tu n’es pas staff => ne rien afficher (rediriger login admin)
-    if not is_staff:
-        return redirect("/admin/login/?next=/")
-
-    # Affichage dashboard admin
-    total_products = Product.objects.count()
-    total_categories = Category.objects.count()
-    total_orders = Order.objects.count()
-    total_clients = ClientProfile.objects.count()
-    total_users = User.objects.count()
-
-    return render(
-        request,
-        "core/admin_home.html",
-        {
-            "needs_superuser_setup": False,
-            "is_staff": True,
-            "existing_user_count": total_users,
-            "total_products": total_products,
-            "total_categories": total_categories,
-            "total_clients": total_clients,
-            "total_orders": total_orders,
-        },
-    )

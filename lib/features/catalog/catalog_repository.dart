@@ -1,10 +1,23 @@
 import '../../core/constants/api_endpoints.dart';
 import '../../core/network/api_client.dart';
+import '../../models/category_meta.dart';
 import '../../models/product.dart';
 
 class CatalogRepository {
   CatalogRepository(this._apiClient);
   final ApiClient _apiClient;
+
+  Future<List<CategoryMeta>> fetchCategories() async {
+    final json = await _apiClient.getJson(ApiEndpoints.categories);
+    final raw = _extractList(json);
+    final out = <CategoryMeta>[];
+    for (final row in raw) {
+      try {
+        out.add(CategoryMeta.fromJson(row));
+      } catch (_) {}
+    }
+    return out;
+  }
 
   Future<List<Product>> fetchProducts() async {
     final json = await _apiClient.getJson(ApiEndpoints.produits);

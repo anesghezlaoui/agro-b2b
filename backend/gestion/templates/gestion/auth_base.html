@@ -1,0 +1,30 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block auth_title %}Connexion{% endblock %} · AgroB2B</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'core/css/gestion.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/gestion_console.css' %}" />
+  </head>
+  <body class="gestion-auth-body">
+    <div class="gestion-auth-card">
+      <div class="gestion-auth-brand">AgroB2B · Console</div>
+      {% if messages %}
+        <div class="gestion-messages">
+          {% for message in messages %}
+            <div class="gestion-toast gestion-toast--{{ message.tags|default:'info' }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% block auth_content %}{% endblock %}
+    </div>
+  </body>
+</html>

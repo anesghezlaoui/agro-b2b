@@ -1,0 +1,53 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Équipe{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Comptes équipe</h1>
+      <p>Utilisateurs Django avec accès à cette console (staff).</p>
+    </div>
+    {% if user.is_superuser %}
+      <a class="gestion-btn gestion-btn--primary" href="{% url 'gestion:user_create' %}">+ Nouvel utilisateur</a>
+    {% endif %}
+  </header>
+
+  <div class="gestion-panel">
+    <div class="gestion-table-wrap">
+      <table class="gestion-table">
+        <thead>
+          <tr>
+            <th>Identifiant</th>
+            <th>Email</th>
+            <th>Staff</th>
+            <th>Superuser</th>
+            <th>Inscription</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+            <tr>
+              <td><strong>{{ u.username }}</strong></td>
+              <td class="gestion-muted">{{ u.email|default:"—" }}</td>
+              <td>{% if u.is_staff %}<span class="gestion-badge gestion-badge--ok">Oui</span>{% else %}<span class="gestion-muted">Non</span>{% endif %}</td>
+              <td>{% if u.is_superuser %}<span class="gestion-badge gestion-badge--ship">Oui</span>{% else %}—{% endif %}</td>
+              <td class="gestion-muted">{{ u.date_joined|date:"d/m/Y" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="5" class="gestion-muted" style="text-align:center;padding:32px;">Aucun utilisateur.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.has_other_pages %}
+      <div class="gestion-pagination">
+        {% if page_obj.has_previous %}
+          <a class="gestion-link" href="?page={{ page_obj.previous_page_number }}">← Précédent</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a class="gestion-link" href="?page={{ page_obj.next_page_number }}">Suivant →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Commande #{{ order.pk }}{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Commande #{{ order.pk }}</h1>
+      <p>Passée le {{ order.created_at|date:"d/m/Y à H:i" }} · {{ order.get_delivery_type_display }}</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:order_list' %}">← Toutes les commandes</a>
+  </header>
+
+  <div class="gestion-panel" style="padding:24px;margin-bottom:20px;">
+    <h2 style="margin:0 0 16px;font-size:1rem;font-weight:800;">Client</h2>
+    <p style="margin:0;"><strong>{{ order.client.phone }}</strong>
+      {% if order.client.business_name %} — {{ order.client.business_name }}{% endif %}</p>
+    <p class="gestion-muted" style="margin:8px 0 0;">Compte : {{ order.client.user.username }}</p>
+  </div>
+
+  <div class="gestion-panel" style="padding:24px;margin-bottom:20px;">
+    <h2 style="margin:0 0 16px;font-size:1rem;font-weight:800;">Mettre à jour le statut</h2>
+    <form method="post" action="" class="gestion-toolbar" style="align-items:flex-end;">
+      {% csrf_token %}
+      {% for field in status_form %}
+        <div>
+          <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <button class="gestion-btn gestion-btn--primary" type="submit">Enregistrer</button>
+    </form>
+  </div>
+
+  <div class="gestion-panel" style="padding:24px;">
+    <h2 style="margin:0 0 16px;font-size:1rem;font-weight:800;">Lignes</h2>
+    <table class="gestion-order-items">
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Qté</th>
+          <th>Prix unit.</th>
+          <th>Sous-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for line in order.items.all %}
+          <tr>
+            <td>{{ line.product.name }}</td>
+            <td>{{ line.quantity }}</td>
+            <td>{{ line.unit_price }} DA</td>
+            <td>{{ line.quantity }} × {{ line.unit_price }} DA</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="gestion-muted">Aucune ligne.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="margin-top:20px;font-size:1.15rem;font-weight:800;">Total : {{ order.total }} DA</p>
+  </div>
+{% endblock %}

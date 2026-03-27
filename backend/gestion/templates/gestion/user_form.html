@@ -1,0 +1,28 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Nouvel utilisateur{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Nouvel utilisateur staff</h1>
+      <p>Réservé aux superutilisateurs. Le mot de passe est défini ici (transmettez-le par un canal sécurisé).</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:user_list' %}">← Retour</a>
+  </header>
+
+  <div class="gestion-panel" style="padding:24px;">
+    <form method="post" class="gestion-form-grid">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="gestion-form-row">
+          <label class="gestion-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<p class="gestion-muted" style="margin:6px 0 0;">{{ field.help_text }}</p>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <div class="gestion-toolbar">
+        <button class="gestion-btn gestion-btn--primary" type="submit">Créer le compte</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

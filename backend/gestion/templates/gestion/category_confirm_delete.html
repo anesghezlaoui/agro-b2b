@@ -1,0 +1,17 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Supprimer la catégorie{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Supprimer la catégorie</h1>
+      <p>Cette action est définitive pour « {{ object.name }} ». Les sous-catégories seront aussi supprimées (cascade).</p>
+    </div>
+    <a class="gestion-btn gestion-btn--ghost" href="{% url 'gestion:category_list' %}">Annuler</a>
+  </header>
+  <div class="gestion-panel" style="padding:24px;">
+    <form method="post">
+      {% csrf_token %}
+      <button class="gestion-btn gestion-btn--primary" type="submit" style="background:var(--agro-danger);border:none;">Confirmer la suppression</button>
+    </form>
+  </div>
+{% endblock %}

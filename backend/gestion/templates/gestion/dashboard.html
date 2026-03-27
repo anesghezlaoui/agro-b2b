@@ -1,0 +1,77 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Tableau de bord{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Tableau de bord</h1>
+      <p>Vue d’ensemble du catalogue et de l’activité. Bonjour, {{ user.get_username }}.</p>
+    </div>
+  </header>
+
+  <div class="gestion-stat-grid">
+    <div class="gestion-stat-card">
+      <div class="val">{{ total_products }}</div>
+      <div class="lbl">Produits</div>
+      <a class="gestion-link" href="{% url 'gestion:product_list' %}">Gérer →</a>
+    </div>
+    <div class="gestion-stat-card">
+      <div class="val">{{ total_categories }}</div>
+      <div class="lbl">Catégories</div>
+      <a class="gestion-link" href="{% url 'gestion:category_list' %}">Gérer →</a>
+    </div>
+    <div class="gestion-stat-card">
+      <div class="val">{{ total_orders }}</div>
+      <div class="lbl">Commandes</div>
+      <a class="gestion-link" href="{% url 'gestion:order_list' %}">Voir →</a>
+    </div>
+    <div class="gestion-stat-card">
+      <div class="val">{{ total_clients }}</div>
+      <div class="lbl">Clients</div>
+      <a class="gestion-link" href="{% url 'gestion:client_list' %}">Gérer →</a>
+    </div>
+    <div class="gestion-stat-card">
+      <div class="val">{{ total_users }}</div>
+      <div class="lbl">Comptes équipe</div>
+      <a class="gestion-link" href="{% url 'gestion:user_list' %}">Voir →</a>
+    </div>
+  </div>
+
+  <div class="gestion-panel">
+    <div class="gestion-page-head" style="margin:0;padding:16px 20px;border-bottom:1px solid var(--agro-border);">
+      <h2 style="margin:0;font-size:1.1rem;font-weight:800;">Dernières commandes</h2>
+      <a class="gestion-link" href="{% url 'gestion:order_list' %}">Tout voir</a>
+    </div>
+    <div class="gestion-table-wrap">
+      <table class="gestion-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Statut</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in recent_orders %}
+            <tr>
+              <td>{{ o.pk }}</td>
+              <td>{{ o.client.phone }}{% if o.client.business_name %} · {{ o.client.business_name }}{% endif %}</td>
+              <td>
+                {% if o.status == 'pending' %}<span class="gestion-badge gestion-badge--wait">{{ o.get_status_display }}</span>
+                {% elif o.status == 'delivered' %}<span class="gestion-badge gestion-badge--done">{{ o.get_status_display }}</span>
+                {% else %}<span class="gestion-badge gestion-badge--ship">{{ o.get_status_display }}</span>{% endif %}
+              </td>
+              <td>{{ o.total }} DA</td>
+              <td class="gestion-muted">{{ o.created_at|date:"d/m/Y H:i" }}</td>
+              <td><a class="gestion-link" href="{% url 'gestion:order_detail' o.pk %}">Détail</a></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="gestion-muted" style="text-align:center;padding:24px;">Aucune commande pour l’instant.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "core/base_gestion.html" %}
+{% block gestion_title %}Clients{% endblock %}
+{% block gestion_content %}
+  <header class="gestion-page-head">
+    <div>
+      <h1>Clients B2B</h1>
+      <p>Profils, validation et encours.</p>
+    </div>
+    <form class="gestion-search" method="get" action="">
+      <input type="text" name="q" value="{{ search_q }}" placeholder="Téléphone, raison sociale, user…" />
+      <button class="gestion-btn gestion-btn--ghost" type="submit">Rechercher</button>
+    </form>
+  </header>
+
+  <div class="gestion-panel">
+    <div class="gestion-table-wrap">
+      <table class="gestion-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Utilisateur</th>
+            <th>Téléphone</th>
+            <th>Raison sociale</th>
+            <th>Validé</th>
+            <th>Dette / plafond</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in clients %}
+            <tr>
+              <td>{{ c.pk }}</td>
+              <td>{{ c.user.username }}</td>
+              <td><strong>{{ c.phone }}</strong></td>
+              <td class="gestion-muted">{{ c.business_name|default:"—" }}</td>
+              <td>{% if c.is_validated %}<span class="gestion-badge gestion-badge--ok">Oui</span>{% else %}<span class="gestion-badge gestion-badge--off">Non</span>{% endif %}</td>
+              <td class="gestion-muted">{{ c.current_debt }} / {{ c.credit_limit }} DA</td>
+              <td><a class="gestion-link" href="{% url 'gestion:client_update' c.pk %}">Modifier</a></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="7" class="gestion-muted" style="text-align:center;padding:32px;">Aucun client.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.has_other_pages %}
+      <div class="gestion-pagination">
+        {% if page_obj.has_previous %}
+          <a class="gestion-link" href="?page={{ page_obj.previous_page_number }}{% if search_q %}&q={{ search_q|urlencode }}{% endif %}">← Précédent</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a class="gestion-link" href="?page={{ page_obj.next_page_number }}{% if search_q %}&q={{ search_q|urlencode }}{% endif %}">Suivant →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
