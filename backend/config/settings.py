@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY
 # -------------------------
 SECRET_KEY = os.environ.get(
-    "^v@3qqm*fc4cyd^=2fr4dtjl==l)zhj*-4u1qli2$+6ov4l=l=",
+    "8d5f9a2dc11d083808bfd75aa32071dd",
     "change-this-in-production"
 )
 
