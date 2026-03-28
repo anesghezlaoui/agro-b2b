@@ -9,6 +9,7 @@ Le code Django réel se trouve au niveau racine du projet
 import os
 import sys
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Ajoute le dossier racine du projet à sys.path pour que `config.*`, `core.*`, etc. soient importables.
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
