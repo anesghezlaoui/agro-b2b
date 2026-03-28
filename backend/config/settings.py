@@ -67,8 +67,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 # -------------------------
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
+        default=os.environ.get("postgresql://admin:ripwB7ds02xfjsfUbMtk0Y2gwFq7VbeQ@dpg-d73e4khr0fns73fhuubg-a/agrob2b"),
         conn_max_age=600
+    ssl_require=True
+
     )
 }
 
