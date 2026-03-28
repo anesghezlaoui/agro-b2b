@@ -57,9 +57,14 @@ class GestionLoginView(LoginView):
     redirect_authenticated_user = True
 
     def dispatch(self, request, *args, **kwargs):
-        if needs_setup():
+        if needs_setup() and request.method == "POST":
             return redirect("gestion:setup")
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["needs_first_user"] = needs_setup()
+        return ctx
 
     def form_valid(self, form):
         user = form.get_user()

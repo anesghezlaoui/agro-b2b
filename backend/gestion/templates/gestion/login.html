@@ -2,23 +2,31 @@
 {% block auth_title %}Connexion{% endblock %}
 {% block auth_content %}
   <h1>Connexion</h1>
-  <p class="lead">Accès réservé à l’équipe (comptes <strong>staff</strong>).</p>
-  <form method="post" action="">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-      <ul class="errorlist">{{ form.non_field_errors }}</ul>
-    {% endif %}
-    <div class="gestion-field">
-      <label class="gestion-label" for="id_username">{{ form.username.label }}</label>
-      {{ form.username }}
-      {{ form.username.errors }}
+  {% if needs_first_user %}
+    <div class="gestion-toast gestion-toast--info" style="margin-bottom:16px;font-weight:500;">
+      Aucun compte n’existe encore. Créez le premier administrateur pour accéder à la console.
     </div>
-    <div class="gestion-field">
-      <label class="gestion-label" for="id_password">{{ form.password.label }}</label>
-      {{ form.password }}
-      {{ form.password.errors }}
-    </div>
-    <input type="hidden" name="next" value="{{ next }}" />
-    <button class="gestion-btn gestion-btn--primary" type="submit" style="width:100%;margin-top:8px;">Se connecter</button>
-  </form>
+    <p class="lead" style="margin-bottom:20px;">La connexion sera possible une fois ce compte créé.</p>
+    <a class="gestion-btn gestion-btn--primary" href="{% url 'gestion:setup' %}" style="display:block;width:100%;text-align:center;box-sizing:border-box;text-decoration:none;">Créer le premier administrateur</a>
+  {% else %}
+    <p class="lead">Accès réservé à l’équipe (comptes <strong>staff</strong>).</p>
+    <form method="post" action="">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <ul class="errorlist">{{ form.non_field_errors }}</ul>
+      {% endif %}
+      <div class="gestion-field">
+        <label class="gestion-label" for="id_username">{{ form.username.label }}</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+      </div>
+      <div class="gestion-field">
+        <label class="gestion-label" for="id_password">{{ form.password.label }}</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+      </div>
+      <input type="hidden" name="next" value="{{ next }}" />
+      <button class="gestion-btn gestion-btn--primary" type="submit" style="width:100%;margin-top:8px;">Se connecter</button>
+    </form>
+  {% endif %}
 {% endblock %}
