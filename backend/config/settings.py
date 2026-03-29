@@ -11,8 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY
 # -------------------------
 SECRET_KEY = os.environ.get(
-    "8d5f9a2dc11d083808bfd75aa32071dd",
-    "change-this-in-production"
+    "SECRET_KEY",
+    "^v@3qqm*fc4cyd^=2fr4dtjl==l)zhj*-4u1qli2$+6ov4l=l="
 )
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     # utile API
     "rest_framework",
     "rest_framework.authtoken",
+    "drf_spectacular",
+    "corsheaders",
+    "gestion",
 ]
 
 # -------------------------
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # static files prod
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -67,7 +71,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # -------------------------
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("postgresql://admin:ripwB7ds02xfjsfUbMtk0Y2gwFq7VbeQ@dpg-d73e4khr0fns73fhuubg-a/agrob2b"),
+        env="DATABASE_URL",
+        default="postgresql://admin:ripwB7ds02xfjsfUbMtk0Y2gwFq7VbeQ@dpg-d73e4khr0fns73fhuubg-a.oregon-postgres.render.com/agrob2b",
         conn_max_age=600
 
     )
@@ -115,9 +120,21 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # REST FRAMEWORK
 # -------------------------
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
-    ]
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "AgroB2B API",
+    "DESCRIPTION": "API B2B commande pour grossiste/superette",
+    "VERSION": "1.0.0",
 }
 
 # -------------------------
